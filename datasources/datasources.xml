@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+    <endpoint endpointtype="postgis" name="k165_pg">
+        <connect>[jdaf.db.connect]</connect>
+        <user>[jdaf.db.user]</user>
+        <pwd>[jdaf.db.pwd]</pwd>
+        <srid>[cbinfo.mapserver.epsg]</srid>
+        <table pkcolumn="ogc_fid"/>
+    </endpoint>
+
+    <endpoint name="infobox-tbl" endpointtype="embedded" displayname="Infobox beskeder">
+        <srs>25832</srs>
+        <config version="1" requires="1">
+        CREATE SCHEMA infotavl AUTHORIZATION SA
+        CREATE TABLE infotavl.infotavl_beskeder ( message VARCHAR(255), id IDENTITY, expire_date date, link VARCHAR(255), title VARCHAR(255))
+        </config>
+    </endpoint>
+
+
+	<datasource displayname="Beskeder" endpoint="k165_pg" name="ds-infotavl">
+        <table geometrycolumn="wkb_geometry" name="mtuserdata.infotavl_beskeder" />
+
+        <sql command='read'>select id, message, title, link, array_to_string(users_id, ',') as users_id 
+							from mtuserdata.infotavl_beskeder</sql>
+
+		<sql command='read_all'>select * from mtuserdata.infotavl_beskeder
+										where expire_date >= current_date
+										ORDER BY id ASC;
+
+		</sql>
+
+		<sql command='read_unread'>select id, message, title, link, array_to_string(users_id, ',') as users_id
+											from mtuserdata.infotavl_beskeder
+											WHERE expire_date >= current_date
+												  AND [string: bruger] = ANY(users_id); 
+
+		</sql>
+		<sql command='read_next_unread'>select id, message, title, link, array_to_string(users_id, ',') as users_id
+											from mtuserdata.infotavl_beskeder
+											WHERE expire_date >= current_date
+										    AND [string: bruger] != ALL(users_id) 
+											ORDER BY id ASC
+											LIMIT 1; 
+
+		</sql>
+
+		<sql command='read_last'>SELECT * FROM mtuserdata.infotavl_beskeder
+										WHERE expire_date > current_date
+										ORDER BY id DESC
+										LIMIT 1;
+		</sql>
+		<sql command="write">insert into mtuserdata.infotavl_beskeder(message,expire_date,link,title,users_id)
+							   values(
+								   [string: message],
+
+								   to_date([string: expire_date],'DD.MM.YYYY'),
+								   [string: if IsDefined(link)              then link else null endif],
+								   [string: title],
+								   '{}'
+							   );
+		</sql>
+		<sql command="opdatere">UPDATE mtuserdata.infotavl_beskeder 
+								SET users_id = array_append(users_id, [string: bruger]) WHERE id = [id];
+		</sql>
+		<sql command="update_many">UPDATE mtuserdata.infotavl_beskeder 
+								SET users_id = array_append(users_id, [string: bruger]) WHERE id IN ([ids]);
+		</sql>
+    </datasource>
+	<!-- [timestamp: SystemTime()], -->
+
+</datasources>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool type="plugin">
+	<requires>
+        <file type="script" name="/modules/infotavl/css/bootstrap/js/bootstrap.min.js" priority="6"/>
+        <!-- <file type="script" name="/modules/infotavl/js/infotavl.js" priority="6"/> -->
+        <file type="css" name="/modules/infotavl/css/bootstrap/css/bootstrap-iso.css" priority="6"/>
+    </requires>
+    <src><![CDATA[
+		var Infotavl = {
+			host: cbInfo.getParam('cbinfo.site.url'),
+			
+			addUser: function(messageId, bruger){
+				var url = this.host + "/cbkort?page=infotavl.add_user";
+				jQuery.post(url, {id:messageId, bruger: bruger}, function(result){});
+			},
+			
+			/*
+				- Read the next messages where current_date < expire_date and user is not found in users_id 
+				- Show Message
+				- Update message.users_id by adding @bruger to the users_id array in the database.
+					
+			*/
+			
+			
+			getNextMessage: function(){
+				var bruger = cbKort.getSession().getPrincipal().getUserShortId();
+				var url = this.host + "/cbkort?page=infotavl.get_next&bruger=" + bruger;
+				jQuery.getJSON(url, function (data){
+					if(data.row[0]._class === "empty"){
+						return;
+					}				
+					var message = data.row[0].row[0];
+					Infotavl.display(message);
+					Infotavl.addUser(message.id, bruger);
+					
+				});
+			},
+			
+			display: function(data){
+				var elem = jQuery('#infotavlModal');				
+				if(data.link){
+					 data.message = data.message + '<br/><br/> mere info <a href="'+ data.link +'">here</a>'; 
+				}
+				elem.find('.modal-title').html(data.title);
+				elem.find('.modal-body').html(data.message);
+				elem.modal({backdrop: 'static', keyboard: false});
+		
+			}
+		};
+
+		setInterval(function(){
+			Infotavl.getNextMessage();
+		},20000); 
+	]]></src>
+
+
+		<jssrc><![CDATA[
+			
+		]]></jssrc>
+
+	<htmlsrc><![CDATA[
+	<div class="bootstrap-iso">
+		<!-- Modal -->
+		<div class="modal fade" id="infotavlModal" tabindex="-1" role="dialog" aria-labelledby="infotavlModalLabel">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="infotavlModalLabel">Modal title</h4>
+			  </div>
+			  <div class="modal-body">
+				...
+			  </div>
+			  <div class="modal-footer">
+				<button id="lukBtn" type="button" class="btn btn-primary" data-dismiss="modal">Luk</button>
+				
+			  </div>
+			</div>
+		  </div>
+		</div> 
+	</div>
+    ]]></htmlsrc>
+</tool>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages>
+	<page name="infotavl.ny_beskeder" transientsession="true" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="write"/>
+                        
+                        <url-parameter name="message">message</url-parameter>
+                        <url-parameter name="expire_date">expire_date</url-parameter>
+                        <url-parameter name="link">link</url-parameter>
+						<url-parameter name="title">title</url-parameter>
+						<!-- <url-parameter name="id" value="messageId"/> -->
+					</url-parameters>
+        </data>
+    </page>
+	<page name="infotavl.add_user" transientsession="true" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="opdatere"/>
+                        <url-parameter name="bruger">bruger</url-parameter>
+                        <url-parameter name="id">id</url-parameter>
+					</url-parameters>
+        </data>
+    </page>
+ 	<page name="infotavl.add_user_to_list" transientsession="true" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="update_many"/>
+                        <url-parameter name="bruger">bruger</url-parameter>
+                        <url-parameter name="ids">ids</url-parameter>
+					</url-parameters>
+        </data>
+    </page>
+ 	<page name="infotavl.get_beskeder" transientsession="true" resultpassing="pass-all-return-last" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="read_all"/>
+						<!-- <url-parameter name="id" value="messageId"/> -->
+					</url-parameters>
+        </data>
+    </page>
+    <page name="infotavl.get_all" transientsession="true" resultpassing="pass-all-return-last" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="read_unread"/>
+						<!-- <url-parameter name="id" value="messageId"/> -->
+					</url-parameters>
+        </data>
+    </page>
+    <page name="infotavl.get_unread" transientsession="true" resultpassing="pass-all-return-last" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="read_unread"/>
+						<!-- <url-parameter name="id" value="messageId"/> -->
+					</url-parameters>
+        </data>
+    </page>
+	<page name="infotavl.get_next" transientsession="true"  contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="read_next_unread"/>
+						<!-- <url-parameter name="id" value="messageId"/> -->
+					</url-parameters>
+        </data>
+    </page>
+
+	<page name="infotavl.get_last_message" transientsession="true" resultpassing="pass-all-return-last" contenttype="json">
+        <data handler="datasource" operation="execute-command">
+					<url-parameters>
+						<url-parameter name="datasource" value="ds-infotavl"/>
+						<url-parameter name="command" value="read_last"/>
+					</url-parameters>
+        </data>
+    </page>
+
+    <page name="infotavl.get_messages" transientsession="true" sessionrequired="false" contenttype="json">
+          <data handler="datasource" operation="execute-command">
+  					<url-parameters>
+  						<url-parameter name="datasource" value="ds-infotavl"/>
+  						<url-parameter name="command" value="read"/>
+  					</url-parameters>
+          </data>
+      </page>
+
+      <page name="infotavl.getThemes" transientsession="true" sessionrequired="false" contenttype="json">
+            <data handler="profile" operation="get-themes2" />
+        </page>
+
+</pages>

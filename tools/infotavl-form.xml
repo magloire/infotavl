@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tool type="plugin">
+	<requires>
+        <!-- <file type="script" name="/modules/infobox/css/bootstrap/js/bootstrap.min.js" priority="6"/> -->
+        <file type="script" name="/modules/infobox/js/app.js" priority="6"/>
+        <file type="css" name="/modules/infobox/css/bootstrap/css/bootstrap-iso.css" priority="6"/>
+    </requires>
+    <src><![CDATA[
+	
+	jQuery('#sendBtn').click(function(){
+			console.log('btn was clicked!');
+			var titleTxt = jQuery('#title-text').val();
+			var msgTxt = jQuery('#message-text').val();
+			var dateTxt = jQuery('#date-text').val();
+			var linkTxt = jQuery('#link-text').val()||'hello';
+			
+		//	if(!txt) return;
+		//	var sender = cbKort.getSession().getPrincipal().getUserShortId();
+		//	var senderName = cbKort.getSession().getPrincipal().getUserName();
+			
+			jQuery.post("http://kort-test.albertslund.net/spatialmap?page=infobox.ny_beskeder",{title:titleTxt, message: msgTxt, expire_date: dateTxt,link: linkTxt}, function(result){
+				jQuery('#title-text').val('');
+				jQuery('#message-text').val('');
+				jQuery('#date-text').val('');
+				jQuery('#link-text').val('');
+				jQuery('#exampleModal').modal('toggle');
+			
+				//chatInput.val('');
+				//chatInput.attr('placeholder','Type your message here...');
+			});
+
+		 });
+	
+	jQuery('modalBtn').click(function(){
+		jQuery('#exampleModal').modal();
+	});
+	jQuery('#exampleModal').on('show.bs.modal', function (event) {
+	  var button = jQuery(event.relatedTarget); 
+	  var recipient = button.data('whatever'); 
+	  var modal = jQuery(this);
+	//  modal.find('.modal-title').text('New message to ' + recipient);
+	//  modal.find('.modal-body input').val(recipient);
+	});
+	
+		
+	]]></src>
+
+
+		<jssrc><![CDATA[
+
+		]]></jssrc>
+
+	<htmlsrc><![CDATA[
+	<div class="bootstrap-iso" >
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="exampleModalLabel">New message</h4>
+			  </div>
+			  <div class="modal-body">
+				<form>
+				  <div class="form-group">
+					<label for="title-text" class="control-label">title:</label>
+					<input type="text" class="form-control" id="title-text">
+				  </div>
+				  <div class="form-group">
+					<label for="message-text" class="control-label">besked:</label>
+					<textarea class="form-control" id="message-text"></textarea>
+				  </div>
+				  <div class="form-group">
+					<label for="date-text" class="control-label">udløbsdatoen:</label>
+					<input type="text" class="form-control" id="date-text">
+				  </div>
+				  <div class="form-group">
+					<label for="link-text" class="control-label">link:</label>
+					<input type="text" class="form-control" id="link-text">
+				  </div>
+				</form>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button id="sendBtn" type="submit" class="btn btn-primary">Send besked</button>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</div>
+	<div class="bootstrap-iso" style="position:absolute;bottom:20px;left:400px;">
+		
+		
+		<a id="modalBtn" href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Skriv ny besked</a>
+	</div>
+    ]]></htmlsrc>
+</tool>
