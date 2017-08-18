@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deploy>
 	<version>0.9</version>
-    <makedir dir="[cbinfo.wwwroot.dir]/modules/infotavl/"/>	
-	<copydir fromdir="[module:infotavl.dir]/datasources" todir="[cbinfo.wwwroot.dir]/modules/infotavl/datasources" replacetext="true"/>
+    <makedir dir="[cbinfo.wwwroot.dir]/modules/infotavl/"/>
+    <param name="module.infotavl.endpoint">ep_edit</param>
+    <param name="module.infotavl.schema">spatialedit</param>
+    <copydir fromdir="[module:infotavl.dir]/datasources" todir="[cbinfo.wwwroot.dir]/modules/infotavl/datasources" replacetext="true"/>
     <copydir fromdir="[module:infotavl.dir]/tools" todir="[cbinfo.wwwroot.dir]/modules/infotavl/tools" replacetext="true"/>  
     <copydir fromdir="[module:infotavl.dir]/pages" todir="[cbinfo.wwwroot.dir]/modules/infotavl/pages" replacetext="true"/>
     <copydir fromdir="[module:infotavl.dir]/js" todir="[cbinfo.wwwroot.dir]/modules/infotavl/js"/>
