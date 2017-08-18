@@ -36,6 +36,9 @@ INSTALLATION
 3: Registrere tool
 	<tool displayname="infotavl" module="infotavl" name="infotavl"/>
    
+4: Redigere deploy.xml and ændre følgende 2 params:
+	- module.infotavl.endpoint  : datasource endpoint
+	- module.infotavl.schema	: database schema.
 --------------------
 DEPENDENCIES
 --------------------
